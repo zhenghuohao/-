@@ -1,0 +1,318 @@
+@import "tailwindcss";
+
+/* ============================================================
+   新中式极简 · 浅色主题
+   暖米白宣纸底 + 低饱和墨色文字 + 黛蓝/赭石点缀
+   能源与动力工程 × 设计 / AI
+   ============================================================ */
+
+:root {
+  color-scheme: light;
+  --bg-paper: #f5f5f0; /* 暖米白纸底 */
+  --bg-paper-warm: #fdfbf4; /* 更暖的纸面高光 */
+  --ink-black: #2b2b2b; /* 标题墨色 */
+  --ink-body: #4a4a4a; /* 正文墨色 */
+  --ink-soft: #575757; /* 次级墨色 */
+  --accent-indigo: #5f6f7e; /* 黛蓝 */
+  --accent-ochre: #b89663; /* 赭石 */
+  --accent-ochre-soft: #d2b48c; /* 淡赭石 */
+  --text-main: #3a3a3a;
+  --text-sub: #6b6b6b;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* 双保险：杜绝任何横向溢出（如光晕环/分割线动画越界）挤压布局 */
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  background: #f5f5f0;
+  color: var(--text-main);
+  font-family:
+    "Inter",
+    "PingFang SC",
+    "Microsoft YaHei",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* 纸面呼吸光晕：极淡的暖光从中心柔化开，保持干净留白 */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 20%,
+    #fdfbf4 0%,
+    #f5f5f0 55%,
+    #efece4 100%
+  );
+  animation: bgPulse 8s ease-in-out infinite alternate;
+}
+@keyframes bgPulse {
+  0% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* 正文：墨色基调 + 行高 1.6（精致排版） */
+p,
+li {
+  line-height: 1.6;
+}
+
+::selection {
+  background: rgba(184, 150, 99, 0.28);
+  color: #2b2b2b;
+}
+
+/* 细滚动条（墨色→黛蓝） */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f5f5f0;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #8a8f96, #5f6f7e);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #6e747d, #4a4a4a);
+}
+
+/* 等宽数字/标签点缀 */
+.font-mono-num {
+  font-family: "JetBrains Mono", "Cascadia Code", ui-monospace, Consolas,
+    monospace;
+}
+
+/* ========== 中层：墨线细节 ========== */
+/* 卡片顶部光线带：黛蓝 hover 时从左向右渐显 */
+.card-neon {
+  position: relative;
+}
+.card-neon::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #b89663, transparent);
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  transition:
+    clip-path 0.35s ease,
+    opacity 0.35s ease;
+}
+.card-neon:hover::before {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+}
+
+/* 模块上下边缘 墨→黛蓝 光带（极淡） */
+.neon-line {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(74, 74, 74, 0.35),
+    rgba(95, 111, 126, 0.4),
+    transparent
+  );
+  animation: edgeShift 5s ease-in-out infinite alternate;
+}
+@keyframes edgeShift {
+  from {
+    transform: translateX(-2%);
+  }
+  to {
+    transform: translateX(2%);
+  }
+}
+
+/* ========== 上层：墨色文字与光影 ========== */
+/* 主标题：墨黑 → 黛蓝 渐变文字 */
+.title-glow {
+  background: linear-gradient(135deg, #2b2b2b, #5f6f7e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.title-sweep {
+  position: relative;
+  overflow: hidden;
+}
+.title-sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(184, 150, 99, 0.2),
+    transparent
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+.title-sweep:hover::after {
+  transform: translateX(100%);
+}
+
+/* 图标：墨色（主体）/ 黛蓝（点缀） */
+.icon-glow {
+  color: var(--ink-black);
+  text-shadow:
+    0 0 10px rgba(74, 74, 74, 0.25),
+    0 0 22px rgba(95, 111, 126, 0.2);
+}
+.icon-glow-blue {
+  color: var(--accent-indigo);
+  text-shadow:
+    0 0 10px rgba(95, 111, 126, 0.35),
+    0 0 22px rgba(184, 150, 99, 0.25);
+}
+
+/* 主按钮：墨色实底 + 柔和投影（行动点） */
+.btn-aurora {
+  background: linear-gradient(135deg, #3a3a3a 0%, #5f6f7e 100%);
+  box-shadow:
+    0 0 22px rgba(74, 74, 74, 0.18),
+    0 8px 30px rgba(74, 74, 74, 0.25);
+}
+
+/* ========== 按钮动态效果 ========== */
+/* 流光扫过：一条浅色光带从左到右循环掠过 */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -85%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.12),
+    transparent
+  );
+  transform: skewX(-20deg);
+  animation: btn-shine-sweep 2.6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes btn-shine-sweep {
+  0% {
+    left: -85%;
+  }
+  60%,
+  100% {
+    left: 140%;
+  }
+}
+
+/* 呼吸光晕：墨色光晕脉动 */
+.btn-glow {
+  animation: btn-glow-pulse 2.6s ease-in-out infinite;
+}
+@keyframes btn-glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 16px rgba(74, 74, 74, 0.18);
+  }
+  50% {
+    box-shadow: 0 0 34px rgba(74, 74, 74, 0.35);
+  }
+}
+
+/* 点击波纹：从鼠标点击处扩散的双层水波 */
+.btn-ripple {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.55) 35%,
+    transparent 70%
+  );
+  transform: scale(0);
+  animation: btn-ripple-anim 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  pointer-events: none;
+}
+@keyframes btn-ripple-anim {
+  60% {
+    transform: scale(8);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(12);
+    opacity: 0;
+  }
+}
+
+/* ========== 纸张玻璃卡片：半透明白 + 细墨边 ==========
+   留白处保持通透，hover 边框染赭石微亮 */
+.glass {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(43, 43, 43, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 8px 40px rgba(74, 74, 74, 0.12);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+.glass:hover {
+  border-color: rgba(184, 150, 99, 0.35);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 12px 48px rgba(74, 74, 74, 0.16);
+}
+
+/* 技能进度条：墨色 → 赭石 渐变填充 */
+.skill-bar {
+  width: 120px;
+  height: 6px;
+  background: rgba(43, 43, 43, 0.06);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.skill-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5f6f7e, #b89663);
+  border-radius: 10px;
+  transform-origin: left;
+}
+
+/* 尊重系统减弱动效偏好：关闭背景动画 */
+@media (prefers-reduced-motion: reduce) {
+  body::after,
+  body::before {
+    animation: none;
+  }
+}
+
