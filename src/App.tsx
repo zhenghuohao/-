@@ -619,7 +619,8 @@ function About() {
           sub="从数据到视觉，从逻辑到表达——把每一件小事做成系统。"
         />
 
-        <div className="relative mt-8 w-full">
+        {/* 桌面端：拍立得卡片堆叠布局 */}
+        <div className="relative mt-8 hidden w-full md:block">
           <BorderGlow
             edgeSensitivity={30}
             glowColor="40 80 80"
@@ -690,6 +691,29 @@ function About() {
                  style={{ color: colors.textMuted }}>ABOUT</p>
             </DraggableCardContainer>
           </BorderGlow>
+        </div>
+
+        {/* 移动端：垂直堆叠卡片布局 */}
+        <div className="relative mt-8 flex flex-col gap-4 md:hidden">
+          {[
+            { icon: '📞', title: '联系方式', bg: 'from-blue-50 to-indigo-100', text: '电话 19816791893\n邮箱 2722281439@qq.com\n籍贯 贵州' },
+            { icon: '🎓', title: '天津商业大学', bg: 'from-emerald-50 to-green-100', text: '能源与动力工程 · 本科\n2026.09 – 2030.06' },
+            { icon: '🏫', title: '贵州省实验高级中学', bg: 'from-orange-50 to-amber-100', text: '高中 · 年级排名前100\n2023.09 – 2026.06' },
+            { icon: '📝', title: '班级学习委员', bg: 'from-pink-50 to-rose-100', text: '作业反馈与统计\n组织班级学习小组' },
+            { icon: '🏀', title: '篮球社团成员', bg: 'from-cyan-50 to-teal-100', text: '参与团队对抗赛\n承担新人带练角色' },
+          ].map((card, i) => (
+            <div key={i} className="rounded-xl bg-white/90 p-4 shadow-lg">
+              <div className={`mb-3 flex h-[100px] w-full items-center justify-center rounded-md bg-gradient-to-br ${card.bg} text-2xl text-gray-400`}>
+                {card.icon}
+              </div>
+              <h4 className="text-center text-base font-bold" style={{ color: colors.textPrimary }}>
+                {card.title}
+              </h4>
+              <p className="mt-1 whitespace-pre-line text-center text-xs leading-relaxed text-gray-500">
+                {card.text}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -794,6 +818,16 @@ function Strengths() {
             overlayColor="#0a0812"
             radius={14}
             pauseOnHover={false}
+            // 移动端适配
+            mobileColumns={2}
+            mobileTileWidth={140}
+            mobileTileHeight={93}
+            mobileGap={12}
+            mobileTilt={8}
+            mobileTurn={-8}
+            mobilePerspective={800}
+            mobileDepth={60}
+            mobileSpeed={25}
           />
         </div>
       </div>

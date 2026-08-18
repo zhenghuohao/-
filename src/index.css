@@ -25,6 +25,45 @@ body {
 }
 
 /* ============================================================
+   移动端全局优化
+   ============================================================ */
+
+/* 防止文字溢出 */
+* {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* 移动端标题换行优化 */
+h1, h2, h3, h4, h5, h6 {
+  word-break: break-all;
+  hyphens: auto;
+}
+
+/* 移动端链接和文本换行 */
+a, p, span {
+  word-break: keep-word;
+}
+
+/* 防止内容横向溢出 */
+main, section, div {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* 移动端图片自适应 */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 移动端视频自适应 */
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ============================================================
    真实媒体背景 — 三段式视频/图片轮播（高性能版）
    - GPU 合成层：will-change + translateZ(0)
    - 用 visibility 隐藏不可见的层降低渲染压力

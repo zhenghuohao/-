@@ -37,8 +37,38 @@ const DriftWall = ({
   grayscale = false,
   overlayColor = '#060010',
   className = '',
-  style
+  style,
+  // 移动端适配参数
+  mobileColumns = 2,
+  mobileTileWidth = 140,
+  mobileTileHeight = 93,
+  mobileGap = 12,
+  mobileTilt = 8,
+  mobileTurn = -8,
+  mobilePerspective = 800,
+  mobileDepth = 60,
+  mobileSpeed = 25
 }) => {
+  // 检测是否为移动端
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)')
+    setIsMobile(mq.matches)
+    const handler = (e) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  // 使用移动端或桌面端参数
+  const cols = isMobile ? mobileColumns : columns
+  const tw = isMobile ? mobileTileWidth : tileWidth
+  const th = isMobile ? mobileTileHeight : tileHeight
+  const g = isMobile ? mobileGap : gap
+  const t = isMobile ? mobileTilt : tilt
+  const tn = isMobile ? mobileTurn : turn
+  const p = isMobile ? mobilePerspective : perspective
+  const d = isMobile ? mobileDepth : depth
+  const sp = isMobile ? mobileSpeed : speed
   const containerRef = useRef(null);
   const planeRef = useRef(null);
   const trackRefs = useRef([]);
@@ -62,18 +92,18 @@ const DriftWall = ({
     return () => mq.removeEventListener('change', onChange);
   }, []);
   const columnItems = useMemo(() => {
-    const cols = Array.from({ length: columns }, () => []);
-    items.forEach((item, i) => cols[i % columns].push(item));
+    const cols = Array.from({ length: cols }, () => []);
+    items.forEach((item, i) => cols[i % cols].push(item));
     return cols.map(col => (col.length ? col : items.slice(0, 1)));
-  }, [items, columns]);
+  }, [items, cols]);
   const columnMeta = useMemo(() => {
-    const unit = tileHeight + gap;
+    const unit = th + g;
     return columnItems.map(col => {
       const copyHeight = Math.max(unit, col.length * unit);
       const copies = Math.max(2, Math.ceil((containerHeight * 1.6) / copyHeight) + 1);
       return { copyHeight, copies };
     });
-  }, [columnItems, tileHeight, gap, containerHeight]);
+  }, [columnItems, th, g, containerHeight]);
   useLayoutEffect(() => {
     if (!containerRef.current) return;
     const ro = new ResizeObserver(([entry]) => {
@@ -86,9 +116,9 @@ const DriftWall = ({
     const dirSign = direction === 'up' ? 1 : -1;
     return columnItems.map((_, c) => {
       const altSign = c % 2 === 0 ? 1 : -1;
-      return speed * columnFactor(c, variance) * dirSign * altSign;
+      return sp * columnFactor(c, variance) * dirSign * altSign;
     });
-  }, [columnItems, speed, direction, variance]);
+  }, [columnItems, sp, direction, variance]);
   useEffect(() => {
     offsetsRef.current = columnMeta.map((meta, c) => meta.copyHeight * ((c * 0.37) % 1));
     velocitiesRef.current = columnItems.map(() => 0);
@@ -99,10 +129,10 @@ const DriftWall = ({
       if (!plane) return;
       plane.style.transform =
         `translate(-50%, -50%) scale(1.18) ` +
-        `rotateX(${tilt + py}deg) rotateY(${turn + px}deg) rotateZ(${roll}deg) ` +
-        `translateZ(${-depth}px)`;
+        `rotateX(${t + py}deg) rotateY(${tn + px}deg) rotateZ(${roll}deg) ` +
+        `translateZ(${-d}px)`;
     },
-    [tilt, turn, roll, depth]
+    [t, tn, roll, d]
   );
   useEffect(() => {
     const animate = ts => {
@@ -201,11 +231,11 @@ const DriftWall = ({
   }, [release]);
   const cssVars = useMemo(
     () => ({
-      '--dw-tile-w': `${tileWidth}px`,
-      '--dw-tile-h': `${tileHeight}px`,
-      '--dw-gap': `${gap}px`,
+      '--dw-tile-w': `${tw}px`,
+      '--dw-tile-h': `${th}px`,
+      '--dw-gap': `${g}px`,
       '--dw-radius': `${radius}px`,
-      '--dw-perspective': `${perspective}px`,
+      '--dw-perspective': `${p}px`,
       '--dw-lift': `${lift}px`,
       '--dw-dim': dim,
       '--dw-gray': grayscale ? 1 : 0,
@@ -213,7 +243,7 @@ const DriftWall = ({
       '--dw-edge': `${Math.max(0, (1 - fade) * 100)}%`,
       ...style
     }),
-    [tileWidth, tileHeight, gap, radius, perspective, lift, dim, grayscale, overlayColor, fade, style]
+    [tw, th, g, radius, p, lift, dim, grayscale, overlayColor, fade, style]
   );
   const renderTile = (item, id, colIndex) => {
     const inner = (

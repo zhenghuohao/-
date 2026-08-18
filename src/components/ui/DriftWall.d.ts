@@ -30,6 +30,16 @@ export interface DriftWallProps {
   overlayColor?: string
   className?: string
   style?: CSSProperties
+  // 移动端适配参数
+  mobileColumns?: number
+  mobileTileWidth?: number
+  mobileTileHeight?: number
+  mobileGap?: number
+  mobileTilt?: number
+  mobileTurn?: number
+  mobilePerspective?: number
+  mobileDepth?: number
+  mobileSpeed?: number
 }
 
 declare const DriftWall: (props: DriftWallProps) => import('react').JSX.Element
