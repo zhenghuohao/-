@@ -36,16 +36,16 @@ const NAV_LINKS = [
 
 const MORPH_ITEMS = [
   {
-    image: 'project-1.webp',
+    image: './project-1.webp',
     caption: 'AI 与 excel',
   },
   {
-    image: 'project-2.webp',
-    video: 'tank-demo.mp4',
+    image: './project-2.webp',
+    video: './tank-demo.mp4',
     caption: '交互界面设计',
   },
   {
-    image: 'project-3.webp',
+    image: './project-3.webp',
     caption: 'AI 与 PPT',
   },
 ]
@@ -451,7 +451,7 @@ function Hero() {
 
         <MaskedHeading
           text="郑国浩"
-          src="/hero-video-720.mp4"
+          src="./hero-video-720.mp4"
           mediaType="video"
           fillScale={1.15}
           parallax={0}
