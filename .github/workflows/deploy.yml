@@ -11,6 +11,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -23,8 +25,24 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+      - name: Deploy to main branch
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # 创建 main-gh-pages 分支并部署
+          git checkout -b main-gh-pages
+          rm -rf *
+          cp -r dist/* .
+          git add .
+          git commit -m "Deploy to main-gh-pages"
+          git push origin main-gh-pages --force
+
+      - name: Delete old branches
+        run: |
+          git fetch --prune
+          for branch in gh-pages; do
+            if git show-ref --verify --quiet "refs/heads/$branch"; then
+              git push origin --delete $branch 2>/dev/null || true
+            fi
+          done

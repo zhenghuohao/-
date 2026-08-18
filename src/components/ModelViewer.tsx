@@ -15,7 +15,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
    2. 把 MODEL_SRC 改成实际文件名（如 '/models/energy.glb'）
    3. 重新构建后模型随 dist 一起打包
    ============================================================ */
-export const MODEL_SRC = `${import.meta.env.BASE_URL || '/'}models/3DWUDAO2.glb`
+export const MODEL_SRC = 'models/3DWUDAO2.glb'
 
 export default function ModelViewer({
   src = MODEL_SRC,
