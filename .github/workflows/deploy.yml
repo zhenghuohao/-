@@ -7,40 +7,25 @@ on:
       - 'dist/**'
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout main branch
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           ref: main
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm install
+      - run: npm install
 
-      - name: Build
-        run: npm run build
+      - run: npm run build
 
-      - name: Deploy to gh-pages branch (root)
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          
-          # Create or checkout gh-pages branch
-          git checkout -b gh-pages origin/gh-pages 2>/dev/null || git checkout --orphan gh-pages
-          
-          # Remove old files
-          rm -rf * .gitignore .nojekyll 2>/dev/null || true
-          
-          # Copy build output to root of gh-pages branch
-          cp -r dist/* .
-          
-          # Commit and push
-          git add -A
-          git commit -m "Deploy build to gh-pages" 2>/dev/null || echo "No changes"
-          git push -f origin gh-pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          keep_files: false
