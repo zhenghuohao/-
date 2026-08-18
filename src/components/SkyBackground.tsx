@@ -82,18 +82,20 @@ export default function SkyBackground() {
     return () => document.removeEventListener('visibilitychange', onVisibility)
   }, [])
 
+  const base = import.meta.env.BASE_URL || '/'
+
   return (
     <div className="sky-bg">
       <video
         ref={vid1Ref}
         className="sky-layer"
-        src="/videos/seg1.mp4"
+        src={`${base}videos/seg1.mp4`}
         loop muted playsInline autoPlay preload="auto"
       />
       <img
         ref={img2Ref}
         className="sky-layer"
-        src="/images/seg2.webp"
+        src={`${base}images/seg2.webp`}
         alt=""
         loading="lazy"
         decoding="async"
@@ -101,7 +103,7 @@ export default function SkyBackground() {
       <video
         ref={vid3Ref}
         className="sky-layer"
-        src="/videos/seg3.mp4"
+        src={`${base}videos/seg3.mp4`}
         loop muted playsInline autoPlay preload="auto"
       />
     </div>

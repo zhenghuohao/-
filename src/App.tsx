@@ -34,18 +34,20 @@ const NAV_LINKS = [
   { label: '联系', href: '#contact' },
 ]
 
+const base = import.meta.env.BASE_URL || '/'
+
 const MORPH_ITEMS = [
   {
-    image: '/project-1.webp',
+    image: `${base}project-1.webp`,
     caption: 'AI与excel',
   },
   {
-    image: '/project-2.webp',
-    video: '/tank-demo.mp4',
+    image: `${base}project-2.webp`,
+    video: `${base}tank-demo.mp4`,
     caption: '交互界面设计',
   },
   {
-    image: '/project-3.webp',
+    image: `${base}project-3.webp`,
     caption: 'AI与PPT',
   },
 ]

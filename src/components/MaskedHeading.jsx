@@ -14,7 +14,7 @@ import './MaskedHeading.css'
 export function MaskedHeading({
   text,
   mediaType = 'video',
-  src = '/hero-video-720.mp4',
+  src = `${import.meta.env.BASE_URL || '/'}hero-video-720.mp4`,
   fillScale = 1.15,
   parallax = 30,
   drift = 15,
