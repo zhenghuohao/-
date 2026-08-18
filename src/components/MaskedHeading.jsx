@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import './MaskedHeading.css'
 
@@ -6,6 +6,10 @@ import './MaskedHeading.css'
  * MaskedHeading —— 视频/纹理遮罩文字
  * 将 text 作为 SVG 蒙版，把动态视频（或图片）裁成文字字形，
  * 实现"文字笔画内部随视频流动"的效果。
+ *
+ * 性能优化：
+ * - 首屏用渐变回退，不立即加载视频
+ * - 页面就绪后延迟加载视频（减少首屏阻塞）
  */
 export function MaskedHeading({
   text,
@@ -25,6 +29,7 @@ export function MaskedHeading({
   const wrapRef = useRef(null)
   const str = String(text ?? '')
   const charCount = Array.from(str).length
+  const [videoReady, setVideoReady] = useState(false)
 
   // 把文字字形编码进 SVG data URI 作为 CSS mask（比例按"每字 1 宽、字高 1"）
   const maskUri = useMemo(() => {
@@ -59,13 +64,66 @@ export function MaskedHeading({
     return () => ctx.revert()
   }, [reveal, trigger, parallax, drift])
 
+  // 页面就绪后延迟加载视频（减少首屏阻塞）
+  useEffect(() => {
+    if (mediaType !== 'video') return
+    const timer = setTimeout(() => setVideoReady(true), 2000)
+    return () => clearTimeout(timer)
+  }, [mediaType])
+
+  // 视频加载完成后淡入，渐变回退淡出
+  useEffect(() => {
+    if (!videoReady) return
+    const video = document.querySelector('.masked-media video')
+    if (!video) return
+
+    const handleCanPlay = () => {
+      video.preload = 'auto'
+      video.classList.add('loaded')
+      const fallback = document.querySelector('.masked-gradient-fallback')
+      if (fallback) fallback.classList.add('fade-out')
+    }
+
+    video.addEventListener('canplay', handleCanPlay)
+    return () => video.removeEventListener('canplay', handleCanPlay)
+  }, [videoReady])
+
+  // 渐变回退（首屏立即显示，不阻塞）
+  const gradientFallback =
+    'linear-gradient(135deg, #c0583a 0%, #f5a623 40%, #38bdf8 100%)'
+
   const media =
     mediaType === 'video' ? (
-      <video className="masked-media" autoPlay loop muted playsInline preload="auto">
-        <source src={src} type="video/mp4" />
-      </video>
+      <>
+        {/* 渐变回退：首屏立即显示 */}
+        {!videoReady && (
+          <div
+            className="masked-media masked-gradient-fallback"
+            style={{ background: gradientFallback }}
+          />
+        )}
+        {/* 视频：延迟加载 */}
+        {videoReady && (
+          <video
+            className="masked-media"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+          >
+            <source src={src} type="video/mp4" />
+          </video>
+        )}
+      </>
     ) : (
-      <img className="masked-media" src={src} alt="" loading="eager" decoding="async" />
+      <img
+        className="masked-media"
+        src={src}
+        alt=""
+        loading="eager"
+        decoding="async"
+      />
     )
 
   return (

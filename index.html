@@ -9,9 +9,58 @@
       content="郑国浩 - 能源与动力工程准大一新生，热爱设计与 AI 的个人作品集"
     />
     <title>郑国浩 · 能源与动力工程准大一 · 设计与 AI</title>
+
+    <!-- 性能优化：预连接外部资源 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- 性能优化：预加载关键资源 -->
+    <link rel="preload" href="/hero-video-720.mp4" as="video" type="video/mp4" />
+
+    <!-- 加载遮罩：页面加载时显示，JS 就绪后隐藏 -->
+    <style>
+      #page-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: linear-gradient(135deg, #1a1a3e 0%, #c0583a 50%, #38bdf8 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.6s ease, visibility 0.6s ease;
+      }
+      #page-loader.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+      #page-loader .loader-text {
+        color: white;
+        font-size: 1.2rem;
+        letter-spacing: 0.3em;
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 1; }
+      }
+    </style>
   </head>
   <body>
+    <!-- 加载遮罩 -->
+    <div id="page-loader">
+      <div class="loader-text">LOADING</div>
+    </div>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // 页面加载完成后隐藏遮罩
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const loader = document.getElementById('page-loader')
+          if (loader) loader.classList.add('hidden')
+        }, 300)
+      })
+    </script>
   </body>
 </html>
