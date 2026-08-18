@@ -36,16 +36,16 @@ const NAV_LINKS = [
 
 const MORPH_ITEMS = [
   {
-    image: '/project-1.jpg',
+    image: '/project-1.webp',
     caption: 'AI与excel',
   },
   {
-    image: '/project-2.jpg',
+    image: '/project-2.webp',
     video: '/tank-demo.mp4',
     caption: '交互界面设计',
   },
   {
-    image: '/project-3.jpg',
+    image: '/project-3.webp',
     caption: 'AI与PPT',
   },
 ]
