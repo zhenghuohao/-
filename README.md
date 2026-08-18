@@ -1,32 +1,21 @@
-# React + TypeScript + Vite
+# 本地预览方法（二选一）
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+## 方法 1：使用开发服务器（推荐）
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm run dev
 ```
+然后在浏览器打开 http://localhost:5174
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## 方法 2：使用 Python 快速启动服务器
+
+如果你安装了 Python，可以在 dist 目录运行：
+```bash
+cd dist
+python -m http.server 8080
+```
+然后打开 http://localhost:8080
+
+---
+
+**重要提示：** 你看到的空白页是因为用文件管理器直接打开 HTML 文件，这在实际部署后不会出现。

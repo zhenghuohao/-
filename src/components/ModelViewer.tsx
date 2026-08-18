@@ -97,9 +97,10 @@ export default function ModelViewer({
       () => setState('error'),
     )
 
-    /* ---------- 渲染循环 ---------- */
+    /* ---------- 渲染循环（视口可见性门控：离开视口停止渲染） ---------- */
     const clock = new THREE.Clock()
     let raf = 0
+    let running = false
     const tick = () => {
       raf = requestAnimationFrame(tick)
       const dt = clock.getDelta()
@@ -107,6 +108,23 @@ export default function ModelViewer({
       controls.update()
       renderer.render(scene, camera)
     }
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (!running) {
+            running = true
+            clock.getDelta() // 丢弃暂停期间的累积时间，避免动画跳变
+            tick()
+          }
+        } else if (running) {
+          running = false
+          cancelAnimationFrame(raf)
+          raf = 0
+        }
+      },
+      { rootMargin: '150px 0px' },
+    )
+    visibilityObserver.observe(el)
     tick()
 
     /* ---------- 容器尺寸自适应 ---------- */
@@ -122,7 +140,9 @@ export default function ModelViewer({
 
     /* ---------- 清理 ---------- */
     return () => {
+      running = false
       cancelAnimationFrame(raf)
+      visibilityObserver.disconnect()
       observer.disconnect()
       controls.dispose()
       mixer?.stopAllAction()

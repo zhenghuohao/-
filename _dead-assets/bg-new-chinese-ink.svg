@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <!-- 宣纸颗粒：极淡的单色噪点，营造哑光特种纸质感 -->
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch" result="noise"/>
+      <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0.03 0"/>
+    </filter>
+    <!-- 墨色晕染：不同程度的柔和模糊 -->
+    <filter id="b4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter>
+    <filter id="b5" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5"/></filter>
+    <filter id="b8" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8"/></filter>
+    <filter id="b10" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="10"/></filter>
+    <filter id="b11" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="11"/></filter>
+    <filter id="b14" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="14"/></filter>
+    <filter id="b26" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="26"/></filter>
+    <filter id="b30" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="30"/></filter>
+  </defs>
+
+  <!-- 底色：暖米白哑光纸 #F5F5F0 -->
+  <rect width="1600" height="900" fill="#F5F5F0"/>
+  <rect width="1600" height="900" filter="url(#grain)" opacity="0.6"/>
+
+  <!-- ============ 上部 30%-40%：几何水墨山峦 ============ -->
+
+  <!-- 远山 1（最淡，冷灰蓝）横贯宽幅的圆润山脊 -->
+  <path d="M0 305 C 130 240, 270 218, 430 232 C 610 248, 730 208, 890 224 C 1050 240, 1210 206, 1385 232 C 1480 245, 1550 254, 1600 264 L 1600 350 L 0 350 Z"
+        fill="#8B919B" opacity="0.28" filter="url(#b14)"/>
+
+  <!-- 远山 2（中层，冷灰）圆润梯形轮廓 -->
+  <path d="M150 335 C 250 278, 400 262, 550 282 C 700 302, 860 262, 1015 278 C 1170 294, 1325 268, 1475 288 C 1530 295, 1570 302, 1600 308 L 1600 355 L 0 355 Z"
+        fill="#6E747D" opacity="0.45" filter="url(#b11)"/>
+
+  <!-- 近山（最深墨色 #4A4A4A）不规则的圆润块面 -->
+  <path d="M300 342 C 385 296, 525 290, 645 305 C 765 320, 885 300, 985 310 C 1085 320, 1205 304, 1305 314 C 1375 320, 1445 328, 1505 334 L 1505 358 L 300 358 Z"
+        fill="#4A4A4A" opacity="0.5" filter="url(#b8)"/>
+
+  <!-- 黛蓝点缀 #5F6F7E：山腰一道短脊 -->
+  <path d="M820 338 C 900 310, 1000 304, 1100 314 C 1190 322, 1260 330, 1310 336 L 1310 352 L 820 352 Z"
+        fill="#5F6F7E" opacity="0.45" filter="url(#b10)"/>
+
+  <!-- 赭石点缀 #D2B48C：远山一抹极淡暖色 -->
+  <ellipse cx="1050" cy="316" rx="155" ry="24" fill="#D2B48C" opacity="0.38" filter="url(#b14)"/>
+
+  <!-- 淡墨点：山顶寥寥几笔 -->
+  <circle cx="205" cy="150" r="4.5" fill="#4A4A4A" opacity="0.22" filter="url(#b5)"/>
+  <circle cx="1430" cy="118" r="3.2" fill="#5F6F7E" opacity="0.3" filter="url(#b5)"/>
+  <circle cx="152" cy="238" r="2.6" fill="#4A4A4A" opacity="0.18" filter="url(#b4)"/>
+
+  <!-- 云雾带：横贯全宽的极淡暖白光带，承上启下 -->
+  <ellipse cx="800" cy="372" rx="980" ry="58" fill="#FAF7EF" opacity="0.82" filter="url(#b26)"/>
+  <ellipse cx="800" cy="396" rx="820" ry="38" fill="#FAF7EF" opacity="0.6" filter="url(#b30)"/>
+
+  <!-- ============ 下部 60%+：纯净留白，无任何元素 ============ -->
+</svg>

@@ -281,6 +281,23 @@ class MorphEngine {
 
     this.boundLoop = this.loop.bind(this);
     this.raf = requestAnimationFrame(this.boundLoop);
+
+    /* 视口可见性门控：离开视口停止渲染，回到视口再恢复（节省 GPU） */
+    this.visible = true;
+    this.lastT = null;
+    this.visibilityObserver = new IntersectionObserver(
+      ([entry]) => this.setVisible(entry.isIntersecting),
+      { rootMargin: '150px 0px' }
+    );
+    this.visibilityObserver.observe(this.container);
+  }
+
+  setVisible(visible) {
+    this.visible = visible;
+    this.lastT = null;
+    if (visible && !this.raf) {
+      this.raf = requestAnimationFrame(this.boundLoop);
+    }
   }
 
   loadTextures() {
@@ -379,7 +396,17 @@ class MorphEngine {
   }
 
   loop(t) {
-    this.program.uniforms.uTime.value = t * 0.001;
+    // 离开视口时停止渲染（setVisible 在回到视口时重新启动循环）
+    if (!this.visible) {
+      this.raf = 0;
+      return;
+    }
+    if (this.lastT === null) this.lastT = t;
+    const dt = Math.min(0.05, (t - this.lastT) / 1000);
+    this.lastT = t;
+    // 累积时间而非墙钟时间，避免暂停/恢复后 uTime 跳变
+    this.timeAcc = (this.timeAcc || 0) + dt;
+    this.program.uniforms.uTime.value = this.timeAcc;
     if (!this.dragging && !this.animating) this.syncOptions();
     // 视频 slide：每帧刷新纹理内容（视频在播放中）
     if (this.videoMeta) {
@@ -523,8 +550,10 @@ class MorphEngine {
 
   destroy() {
     cancelAnimationFrame(this.raf);
+    this.raf = 0;
     if (this.tween) this.tween.kill();
     this.resizeObserver.disconnect();
+    this.visibilityObserver.disconnect();
     this.canvas.removeEventListener('webglcontextlost', this.boundContextLost);
     if (this.videoMeta) {
       for (const key in this.videoMeta) {
@@ -578,7 +607,7 @@ export default function MorphSlider({
       items,
       startIndex,
       reducedMotion,
-      dprCap: 2,
+      dprCap: 1.5,
       getOptions: () => optsRef.current,
       onIndexChange: setIndex
     });
